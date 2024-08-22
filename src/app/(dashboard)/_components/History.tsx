@@ -51,7 +51,6 @@ export default function History({
         `/api/history-data?timeframe=${timeframe}&year=${period.year}&month=${period.month}`
       ).then((res) => res.json()),
   });
-  console.log(historyDataQuery.data);
   const dataAvailable =
     historyDataQuery.data && historyDataQuery.data.length > 0;
   return (

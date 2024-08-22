@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { connectDb } from "@/lib/connectDb";
 import MonthHistory from "@/models/MonthHistory";
 import YearHistory from "@/models/YearHistory";
 import { Period, TimeFrame } from "@/types/types";
@@ -12,6 +13,7 @@ const getHistoryDataSchema = z.object({
   year: z.coerce.number().min(2000).max(3000).default(0),
 });
 export async function GET(request: Request) {
+  await connectDb();
   const session = await auth();
   if (!session) {
     redirect("/auth");
@@ -38,7 +40,6 @@ export async function GET(request: Request) {
       year: queryParams.data.year,
     }
   );
-  console.log(data);
   return Response.json(data);
 }
 export type getHistoryDataResponseType = Awaited<
@@ -90,7 +91,6 @@ async function getYearHistoryData(userId: string, year: number) {
       },
     },
   ]);
-  console.log(result);
   if (!result || result.length === 0) return [];
   const history: HistoryData[] = [];
   for (let i = 0; i < 12; i++) {
@@ -98,7 +98,6 @@ async function getYearHistoryData(userId: string, year: number) {
     let income = 0;
     const month = result.find((row) => row._id.month === i);
     if (month) {
-      console.log(month);
       expense = month.expense || 0;
       income = month.income || 0;
     }
@@ -109,7 +108,6 @@ async function getYearHistoryData(userId: string, year: number) {
       income,
     });
   }
-  console.log(history);
   return history;
 }
 async function getMonthHistoryData(
@@ -142,7 +140,6 @@ async function getMonthHistoryData(
       },
     },
   ]);
-  console.log(result);
   if (!result || result.length === 0) return [];
   const history: HistoryData[] = [];
   const daysInMonth = getDaysInMonth(new Date(year, month));
@@ -162,6 +159,5 @@ async function getMonthHistoryData(
       day: i,
     });
   }
-  console.log(history);
   return history;
 }

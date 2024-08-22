@@ -28,7 +28,6 @@ import { DataTableColumnHeader } from "@/components/datatable/ColumnHeader";
 import { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { DataTableFacetedFilter } from "@/components/datatable/FacetedFilters";
-import { DataTableViewOptions } from "@/components/datatable/ColumnToggle";
 import { Button } from "@/components/ui/button";
 import { download, generateCsv, mkConfig } from "export-to-csv";
 import { DownloadIcon, MoreHorizontal, TrashIcon } from "lucide-react";
@@ -164,7 +163,6 @@ export default function TransactionTable({ from, to }: Props) {
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
-  console.log(sorting);
   const categoriesOptions = useMemo(() => {
     const categoriesMap = new Map();
     history.data?.forEach((transaction) => {
@@ -176,7 +174,6 @@ export default function TransactionTable({ from, to }: Props) {
     const uniqueCategories = new Set(categoriesMap.values());
     return Array.from(uniqueCategories);
   }, [history.data]);
-  console.log(table.getAllColumns());
   return (
     <div className="w-full">
       <div className="flex flex-wrap items-end justify-between gap-2 py-4">

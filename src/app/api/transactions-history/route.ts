@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { connectDb } from "@/lib/connectDb";
 import { GetFormatterForCurrency } from "@/lib/helpers";
 import Transaction from "@/models/Transaction";
 import UserSettings from "@/models/UserSettings";
@@ -7,6 +8,7 @@ import { User } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export async function GET(request: Request) {
+  await connectDb();
   const session = await auth();
   const user = session?.user;
   if (!user) {
@@ -29,7 +31,6 @@ export async function GET(request: Request) {
     queryParams.data.from,
     queryParams.data.to
   );
-  // console.log(transactions);
   return Response.json(transactions);
 }
 export type getTransactionHistoryResponseType = Awaited<
@@ -52,8 +53,6 @@ async function getTransactionsHistory(userId: string, from: Date, to: Date) {
   }).sort({
     date: 1,
   });
-  console.log("===TRANSACTIONS===");
-  console.log(transactions);
   return transactions.map((transaction) => ({
     ...transaction,
     formattedAmount: formatter.format(transaction.amount),

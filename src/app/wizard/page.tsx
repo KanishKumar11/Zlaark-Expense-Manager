@@ -18,7 +18,6 @@ import React from "react";
 
 const Page = async () => {
   const session = await auth();
-  console.log(session);
   if (!session) redirect("/auth");
   return (
     <div className="container flex max-w-2xl flex-col items-center justify-center h-full gap-4 ">

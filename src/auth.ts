@@ -15,13 +15,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       delete session.user.name;
       delete session.user.image;
 
-      console.log(session);
       return session;
     },
     async signIn({ account, profile }) {
       if (account?.provider === "google") {
         const user = await handleUserSignIn(profile);
-        console.log("User signed in:", user);
+        return user;
       }
       return true;
     },
@@ -32,7 +31,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.accessToken = account.access_token;
         token = { ...existingUser._doc };
         token.id = existingUser._id.toString();
-        console.log(token);
         delete token.name;
         delete token.picture;
       }

@@ -26,7 +26,6 @@ export default function StatsCards({ from, to, userSettings }: Props) {
     return GetFormatterForCurrency(userSettings.currencyCode);
   }, [userSettings.currencyCode]);
   const income = statsQuery.data?.income || 0;
-  console.log(income);
   const expense = statsQuery.data?.expense || 0;
   const balance = income - expense;
   return (

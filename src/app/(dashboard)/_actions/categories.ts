@@ -22,14 +22,12 @@ export async function CreateCategory(form: CreateCategorySchemaType) {
     redirect("/auth");
   }
   const { name, icon, type } = parsedBody.data;
-  console.log(name, icon, type);
   const newCategory = new Category({
     name,
     icon,
     type,
     userId: session.user?.id,
   });
-  console.log(newCategory);
   await newCategory.save();
 
   return {
@@ -58,5 +56,4 @@ export async function DeleteCategory(form: DeleteCategorySchemaType) {
     },
     { new: true }
   );
-  console.log(categories);
 }

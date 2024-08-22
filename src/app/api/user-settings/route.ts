@@ -7,7 +7,6 @@ import { redirect } from "next/navigation";
 export async function GET(request: Request) {
   await connectDb();
   const user = await auth();
-  console.log(user);
   if (!user) {
     redirect("/auth");
   }
@@ -17,9 +16,7 @@ export async function GET(request: Request) {
       userId: user.user?.id,
       currencyCode: "USD",
     });
-    console.log(newUserSettings);
     userSettings = await newUserSettings.save();
-    console.log(userSettings);
     if (!userSettings) {
       return Response.error();
     }

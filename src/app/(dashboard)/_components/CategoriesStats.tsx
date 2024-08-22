@@ -54,12 +54,10 @@ function CategoriesCard({
   formatter: Intl.NumberFormat;
   data: getCategoriesStatsResponseType;
 }) {
-  console.log(data);
   const filteredData = data.filter((e1) => e1._id.type === type);
-  console.log(filteredData);
   const total = filteredData.reduce((acc, e1) => acc + (e1.sum || 0), 0);
   return (
-    <Card className="h-80 w-full">
+    <Card className="h-80 w-full p-2">
       <CardHeader>
         <CardTitle className="grid grid-flow-row justify-between gap-2 text-muted-foreground md:grid-flow-col">
           {type === "income" ? "Incomes " : "Expenses "}by category

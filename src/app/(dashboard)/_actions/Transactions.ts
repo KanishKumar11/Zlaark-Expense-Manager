@@ -83,7 +83,6 @@ export async function CreateTransaction(form: CreateTransactionSchemaType) {
     );
 
     await mongooseSession.commitTransaction();
-    console.log("Transaction and history update successful.");
   } catch (err) {
     await mongooseSession.abortTransaction();
     console.error("Transaction failed, rolling back:", err);

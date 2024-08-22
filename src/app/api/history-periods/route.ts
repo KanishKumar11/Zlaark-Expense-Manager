@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { connectDb } from "@/lib/connectDb";
 import MonthHistory from "@/models/MonthHistory";
 import { redirect } from "next/navigation";
 
@@ -13,13 +14,12 @@ export type getHistoryPeriodsResponseType = Awaited<
 >;
 
 async function getHistoryPeriods(userId: string) {
+  await connectDb();
   const result = await MonthHistory.find({ userId })
     .distinct("year")
     .sort({ year: "asc" });
 
-  console.log(result);
   const years = result;
-  console.log(years);
   if (years.length === 0) {
     return [new Date().getFullYear()];
   }

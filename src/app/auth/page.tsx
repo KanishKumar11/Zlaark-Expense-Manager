@@ -4,9 +4,11 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -14,26 +16,43 @@ const page = async () => {
   const session = await auth();
   if (session?.user) redirect("/");
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center justify-center h-[80vh]">
       <Card>
         <CardHeader>
-          <CardTitle>Enter your details</CardTitle>
-          <CardDescription>To experience the best</CardDescription>
+          <CardTitle>Authenticate youself</CardTitle>
+          <CardDescription>
+            To enter the world of Zlaark expense manager
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center justify-between w-full flex-wrap">
+          <div className="flex   w-full ">
             {" "}
             <form
               action={async () => {
                 "use server";
-                await signIn("google");
+                await signIn("google", {
+                  redirectTo: "/",
+                });
               }}
+              className="w-full"
             >
-              <Button type="submit">Google</Button>
+              <Button className="w-full" type="submit">
+                <Image
+                  src="/google.svg"
+                  width={30}
+                  height={30}
+                  className="w-5 h-5 mr-3"
+                  alt=""
+                />{" "}
+                Google
+              </Button>
             </form>
-            <Button>Github</Button>
+            {/* <Button>Github</Button> */}
           </div>
         </CardContent>
+        <CardFooter>
+          <CardDescription>More options will be added soon!</CardDescription>
+        </CardFooter>
       </Card>
     </div>
   );

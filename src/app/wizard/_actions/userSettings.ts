@@ -1,11 +1,13 @@
 "use server";
 
 import { auth } from "@/auth";
+import { connectDb } from "@/lib/connectDb";
 import UserSettings from "@/models/UserSettings";
 import { UpdateUserCurrencySchema } from "@/schema/userSettings";
 import { redirect } from "next/navigation";
 
 export async function UpdateUserCurrency(currencyCode: string) {
+  await connectDb();
   const parsedBody = UpdateUserCurrencySchema.safeParse({
     currencyCode,
   });
@@ -24,7 +26,6 @@ export async function UpdateUserCurrency(currencyCode: string) {
     },
     { new: true }
   );
-  console.log(userSettings);
   return {
     userId: userSettings._doc.userId,
     currencyCode: userSettings._doc.currencyCode,

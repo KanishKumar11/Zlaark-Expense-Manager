@@ -38,7 +38,7 @@ export default function DeleteTransactionDialog({
       });
     },
     onError: () => {
-      toast.error("Error deleting category", {
+      toast.error("Error deleting transaction", {
         id: transactionId,
       });
     },

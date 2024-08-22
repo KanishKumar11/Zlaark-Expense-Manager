@@ -1,10 +1,12 @@
 import { auth } from "@/auth";
+import { connectDb } from "@/lib/connectDb";
 import Transaction from "@/models/Transaction";
 import { OverviewQuerySchema } from "@/schema/overview";
 import mongoose from "mongoose";
 import { redirect } from "next/navigation";
 
 export async function GET(request: Request) {
+  await connectDb();
   const session = await auth();
   if (!session) redirect("/auth");
   const { searchParams } = new URL(request.url);
@@ -21,7 +23,6 @@ export async function GET(request: Request) {
     queryParams.data.from,
     queryParams.data.to
   );
-  console.log(stats);
   return Response.json(stats);
 }
 export type getCategoriesStatsResponseType = Awaited<
@@ -50,6 +51,5 @@ async function getCategoriesStats(userId: string, from: Date, to: Date) {
       $sort: { sum: -1 },
     },
   ]);
-  console.log(stats);
   return stats;
 }
