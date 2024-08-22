@@ -23,7 +23,7 @@ import { getSession } from "next-auth/react";
 import { Session } from "next-auth";
 import { redirect } from "next/navigation";
 
-export default function page() {
+export default function Page() {
   const [session, setSession] = useState<Session | null>(null);
   useMemo(() => {
     getSession().then((res) => setSession(res));
