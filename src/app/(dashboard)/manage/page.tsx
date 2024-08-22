@@ -11,7 +11,7 @@ import {
 import { TransactionType } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
 import { PlusSquare, TrashIcon, TrendingDown, TrendingUp } from "lucide-react";
-import React from "react";
+import React, { useMemo, useState } from "react";
 import CreateCategoryDialog from "../_components/CreateCategoryDialog";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -19,8 +19,16 @@ import { cn } from "@/lib/utils";
 import { ICategory } from "@/models/Category";
 import { DeleteCategoryDialog } from "../_components/DeleteCategoryDialog";
 import DockArea from "@/components/DockArea";
+import { getSession } from "next-auth/react";
+import { Session } from "next-auth";
+import { redirect } from "next/navigation";
 
 export default function page() {
+  const [session, setSession] = useState<Session | null>(null);
+  useMemo(() => {
+    getSession().then((res) => setSession(res));
+  }, []);
+  if (!session) redirect("/auth");
   return (
     <>
       <div className="border-b bg-card ">

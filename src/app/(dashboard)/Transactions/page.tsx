@@ -3,12 +3,20 @@
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { MAX_DATE_RANGE_DAYS } from "@/lib/constants";
 import { differenceInDays, startOfMonth } from "date-fns";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import TransactionTable from "./_components/TransactionTable";
 import DockArea from "@/components/DockArea";
+import { getSession, useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+import { Session } from "next-auth";
 
 export default function TransactionsPage() {
+  const [session, setSession] = useState<Session | null>(null);
+  useMemo(() => {
+    getSession().then((res) => setSession(res));
+  }, []);
+  if (!session) redirect("/auth");
   const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
     from: startOfMonth(new Date()),
     to: new Date(),
