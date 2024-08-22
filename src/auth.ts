@@ -1,11 +1,11 @@
-import NextAuth, { Session } from "next-auth";
-import credentials from "next-auth/providers/credentials";
+import NextAuth from "next-auth";
 import google from "next-auth/providers/google";
 import { connectDb } from "./lib/connectDb";
-import User, { IUser } from "./models/User";
+import User from "./models/User";
+import { handleUserSignIn } from "./lib/actions";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [google, credentials],
+  providers: [google],
   callbacks: {
     async session({ session, token, user }) {
       session.user.avatar = token.avatar;
@@ -20,25 +20,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async signIn({ account, profile }) {
       if (account?.provider === "google") {
-        console.log("profile:", profile);
-        await connectDb();
-        const existingUser = await User.findOne({ email: profile?.email });
-        if (!existingUser) {
-          const newUser = new User({
-            fullName: profile?.name,
-            email: profile?.email,
-            avatar: profile?.picture,
-          });
-          const savedUser = await newUser.save();
-
-          console.log(savedUser);
-        }
+        const user = await handleUserSignIn(profile);
+        console.log("User signed in:", user);
       }
       return true;
     },
     async jwt({ token, user, account }) {
       if (account) {
-        await connectDb();
+        // await connectDb();
         const existingUser = await User.findOne({ email: user.email });
         token.accessToken = account.access_token;
         token = { ...existingUser._doc };
