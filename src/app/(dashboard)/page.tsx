@@ -7,8 +7,10 @@ import CreateTransactionDialog from "./_components/CreateTransactionDialog";
 import Overview from "./_components/Overview";
 import History from "./_components/History";
 import DockArea from "@/components/DockArea";
+import { connectDb } from "@/lib/connectDb";
 
 const page = async () => {
+  await connectDb();
   const session = await auth();
   if (!session) {
     redirect("/auth");
