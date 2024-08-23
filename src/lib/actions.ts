@@ -17,7 +17,14 @@ export async function handleUserSignIn(profile: any) {
       avatar: profile?.picture,
     });
     const savedUser = await newUser.save();
-
+    await Promise.all(
+      defaultCategories.map(category => {
+        const newCategory = new Category({
+          ...category,
+          userId: savedUser._doc._id
+        });
+         newCategory.save();
+      }))
     return savedUser;
   }
 

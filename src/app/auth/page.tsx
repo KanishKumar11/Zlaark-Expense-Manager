@@ -19,7 +19,7 @@ const page = async () => {
     <div className="flex items-center justify-center h-[80vh]">
       <Card>
         <CardHeader>
-          <CardTitle>Authenticate youself</CardTitle>
+          <CardTitle>Authenticate yourself</CardTitle>
           <CardDescription>
             To enter the world of Zlaark expense manager
           </CardDescription>
