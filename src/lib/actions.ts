@@ -2,6 +2,7 @@
 import User from "../models/User";
 import { connectDb } from "../lib/connectDb";
 import { defaultCategories } from "./constants";
+import Category from "@/models/Category";
 
 // A function to handle database operations for user sign-in
 export async function handleUserSignIn(profile: any) {
