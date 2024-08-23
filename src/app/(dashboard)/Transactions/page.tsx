@@ -20,7 +20,7 @@ export default function TransactionsPage() {
       .then((res) => setSession(res))
       .catch(() => toast.error("Failed to fetch session"));
   }, []);
-
+  //if (!session) redirect("/auth");
   const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
     from: subYears(new Date(), 1),
     to: new Date(),

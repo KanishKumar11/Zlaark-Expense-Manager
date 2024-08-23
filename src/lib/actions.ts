@@ -1,6 +1,8 @@
 "use server";
 import User from "../models/User";
 import { connectDb } from "../lib/connectDb";
+import { defaultCategories } from "./constants";
+import Category from "@/models/Category";
 import { Profile } from "next-auth";
 
 // A function to handle database operations for user sign-in
@@ -18,7 +20,15 @@ export async function handleUserSignIn(profile: Profile | undefined) {
       avatar: profile?.picture,
     });
     const savedUser = await newUser.save();
-
+    await Promise.all(
+      defaultCategories.map((category) => {
+        const newCategory = new Category({
+          ...category,
+          userId: savedUser._doc._id,
+        });
+        newCategory.save();
+      })
+    );
     return savedUser;
   }
 

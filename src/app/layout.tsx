@@ -5,6 +5,7 @@ import "@/styles/shadcn.css";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import RootProviders from "@/components/providers/RootProviders";
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -20,6 +21,9 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <GoogleAnalytics gaId="G-TQT9MD1JJL"/>
+      </head>
       <body className={montserrat.className}>
         <RootProviders>{children}</RootProviders>
       </body>
