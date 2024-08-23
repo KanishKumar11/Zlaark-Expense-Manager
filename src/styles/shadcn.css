@@ -68,3 +68,27 @@
     --chart-5: 27 87% 67%;  
   }
 }
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--foreground));
+  border-radius: 20px; /* Increased border-radius for a more rounded thumb */
+  border: 3px solid hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--primary));
+}
+
+/* Scrollbar for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--foreground)) hsl(var(--muted));
+  border-radius: 20px; /* For more rounded thumb in Firefox */
+}

@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "../ui/sonner";
 import Navbar from "../Navbar";
+import AddToHomeScreen from "../AddToHomeScreen";
 const RootProviders = ({ children }: { children: ReactNode }) => {
   const [queryClient] = useState(() => new QueryClient({}));
   return (
@@ -17,6 +18,7 @@ const RootProviders = ({ children }: { children: ReactNode }) => {
         enableSystem
         disableTransitionOnChange
       >
+        <AddToHomeScreen />
         <Toaster richColors position="top-center" />
         <Navbar />
         {children}

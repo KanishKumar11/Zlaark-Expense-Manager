@@ -1,11 +1,11 @@
 import NextAuth from "next-auth";
 import google from "next-auth/providers/google";
-import { connectDb } from "./lib/connectDb";
+import github from "next-auth/providers/github";
 import User from "./models/User";
-import { handleUserSignIn } from "./lib/actions";
+import { handleGithubSignIn, handleUserSignIn } from "./lib/actions";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [google],
+  providers: [google, github],
   callbacks: {
     async session({ session, token, user }) {
       session.user.avatar = token.avatar;
@@ -21,6 +21,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (account?.provider === "google") {
         const user = await handleUserSignIn(profile);
         return user;
+      }
+      {
+        if (account?.provider === "github") {
+          console.log(profile);
+          const user = await handleGithubSignIn(profile);
+          return user;
+        }
       }
       return true;
     },

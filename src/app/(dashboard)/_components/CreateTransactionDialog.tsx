@@ -87,7 +87,7 @@ const CreateTransactionDialog = ({ trigger, type }: Props) => {
       setOpen((prev) => !prev);
     },
   });
-  const onSubmit = useCallback((values: CreateTransactionSchemaType) => {
+  const onSubmit = (values: CreateTransactionSchemaType) => {
     toast.loading("Creating transactions...", {
       id: "create-transaction",
     });
@@ -95,7 +95,7 @@ const CreateTransactionDialog = ({ trigger, type }: Props) => {
       ...values,
       date: DateToUTCDate(values.date),
     });
-  }, []);
+  };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -195,6 +195,7 @@ const CreateTransactionDialog = ({ trigger, type }: Props) => {
                           onSelect={(value) => {
                             if (!value) return;
                             field.onChange(value);
+                            console.log(value);
                           }}
                           initialFocus
                         />
@@ -210,8 +211,8 @@ const CreateTransactionDialog = ({ trigger, type }: Props) => {
             </div>
           </form>
         </Form>
-        <DialogFooter>
-          <DialogClose asChild>
+        <DialogFooter className="flex gap-2 items-center flex-row w-full flex-auto">
+          <DialogClose asChild className="flex-1">
             <Button
               type="button"
               variant={"secondary"}
@@ -220,7 +221,11 @@ const CreateTransactionDialog = ({ trigger, type }: Props) => {
               Cancel
             </Button>
           </DialogClose>
-          <Button onClick={form.handleSubmit(onSubmit)} disabled={isPending}>
+          <Button
+            onClick={form.handleSubmit(onSubmit)}
+            disabled={isPending}
+            className="flex-1"
+          >
             {!isPending ? "Create" : <Loader2 className="animate-spin" />}
           </Button>
         </DialogFooter>

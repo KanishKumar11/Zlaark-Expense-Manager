@@ -51,7 +51,7 @@ async function getTransactionsHistory(userId: string, from: Date, to: Date) {
       $lte: to,
     },
   }).sort({
-    date: 1,
+    date: -1,
   });
   return transactions.map((transaction) => ({
     ...transaction,

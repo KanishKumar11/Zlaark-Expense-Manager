@@ -19,7 +19,6 @@ export async function CreateTransaction(form: CreateTransactionSchemaType) {
   if (!parsedBody.success) {
     throw new Error(parsedBody.error.message);
   }
-
   const session = await auth();
   if (!session) {
     return redirect("/auth");

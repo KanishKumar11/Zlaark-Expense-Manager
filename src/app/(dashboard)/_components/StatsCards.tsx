@@ -22,6 +22,7 @@ export default function StatsCards({ from, to, userSettings }: Props) {
         `/api/stats/balance?from=${DateToUTCDate(from)}&to=${DateToUTCDate(to)}`
       ).then((res) => res.json()),
   });
+  console.log(from, statsQuery);
   const formatter = useMemo(() => {
     return GetFormatterForCurrency(userSettings.currencyCode);
   }, [userSettings.currencyCode]);

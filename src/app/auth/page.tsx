@@ -25,7 +25,7 @@ const page = async () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex   w-full ">
+          <div className="flex gap-2  w-full ">
             {" "}
             <form
               action={async () => {
@@ -45,6 +45,26 @@ const page = async () => {
                   alt=""
                 />{" "}
                 Google
+              </Button>
+            </form>
+            <form
+              action={async () => {
+                "use server";
+                await signIn("github", {
+                  redirectTo: "/",
+                });
+              }}
+              className="w-full"
+            >
+              <Button className="w-full" type="submit">
+                <Image
+                  src="/google.svg"
+                  width={30}
+                  height={30}
+                  className="w-5 h-5 mr-3"
+                  alt=""
+                />{" "}
+                Github
               </Button>
             </form>
             {/* <Button>Github</Button> */}
