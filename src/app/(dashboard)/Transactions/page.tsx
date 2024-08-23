@@ -16,7 +16,7 @@ export default function TransactionsPage() {
   useMemo(() => {
     getSession().then((res) => setSession(res));
   }, []);
-  if (!session) redirect("/auth");
+  //if (!session) redirect("/auth");
   const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
     from: startOfMonth(new Date()),
     to: new Date(),
