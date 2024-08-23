@@ -28,7 +28,7 @@ export default function Page() {
   useMemo(() => {
     getSession().then((res) => setSession(res));
   }, []);
-  if (!session) redirect("/auth");
+  //if (!session) redirect("/auth");
   return (
     <>
       <div className="border-b bg-card ">
