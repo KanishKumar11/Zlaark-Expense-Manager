@@ -1,11 +1,76 @@
 import NextAuth from "next-auth";
 import google from "next-auth/providers/google";
 import github from "next-auth/providers/github";
+import credentials from "next-auth/providers/credentials";
 import User from "./models/User";
-import { handleGithubSignIn, handleUserSignIn } from "./lib/actions";
+import {
+  getUserByEmail,
+  handleEmailSignIn,
+  handleGithubSignIn,
+  handleUserSignIn,
+} from "./lib/actions";
+import bcrypt from "bcryptjs";
+
+interface Credentials {
+  email: string;
+  password: string;
+  fullName?: string;
+  avatar?: string;
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [google, github],
+  providers: [
+    google,
+    github,
+    credentials({
+      name: "Credentials",
+      credentials: {
+        email: {
+          label: "Email",
+          type: "text",
+          placeholder: "your-email@example.com",
+        },
+        password: { label: "Password", type: "password" },
+        fullName: { label: "Full name", type: "text" },
+      },
+      async authorize(credentials) {
+        const { fullName, email, password } = credentials as Credentials;
+        const existingUser = await getUserByEmail(email);
+        if (existingUser) {
+          const isValidPassword = await bcrypt.compare(
+            password,
+            existingUser.password
+          );
+          console.log(isValidPassword);
+          console.log(existingUser);
+          if (isValidPassword) {
+            return {
+              id: existingUser._id.toString(),
+              email: existingUser.email,
+              fullName: existingUser.fullName,
+              avatar: existingUser.avatar,
+            };
+          } else {
+            throw new Error("Invalid password");
+          }
+        } else {
+          const avatar = "";
+          const user = await handleEmailSignIn(
+            fullName,
+            email,
+            avatar,
+            password
+          );
+          return {
+            id: user._doc._id.toString(),
+            email: user._doc.email,
+            fullName: user._doc.fullName,
+            avatar,
+          };
+        }
+      },
+    }),
+  ],
   callbacks: {
     async session({ session, token, user }) {
       session.user.avatar = token.avatar;
@@ -14,7 +79,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.id = token.id;
       delete session.user.name;
       delete session.user.image;
-
+      console.log(session);
       return session;
     },
     async signIn({ account, profile }) {
@@ -29,6 +94,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return user;
         }
       }
+      {
+        if (account?.provider === "credentials") {
+          console.log(profile);
+        }
+      }
+      console.log(account);
       return true;
     },
     async jwt({ token, user, account }) {

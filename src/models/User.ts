@@ -4,6 +4,7 @@ export interface IUser {
   email: string;
   password?: string;
   avatar?: string;
+  isVerified?: boolean;
 }
 
 const userSchema = new Schema<IUser>(
@@ -23,12 +24,18 @@ const userSchema = new Schema<IUser>(
     password: {
       type: String,
       required: false,
+      select: false,
     },
     avatar: {
       type: String,
       required: false,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
   },
+
   { timestamps: true }
 );
 

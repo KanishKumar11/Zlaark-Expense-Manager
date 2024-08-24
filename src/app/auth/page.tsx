@@ -8,9 +8,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import React from "react";
+import EmailLogin from "./_components/EmailLogin";
 
 const page = async () => {
   const session = await auth();
@@ -24,7 +28,7 @@ const page = async () => {
             To enter the world of Zlaark expense manager
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex gap-5 flex-col">
           <div className="flex gap-2  w-full ">
             {" "}
             <form
@@ -58,7 +62,7 @@ const page = async () => {
             >
               <Button className="w-full" type="submit">
                 <Image
-                  src="/google.svg"
+                  src="/github.svg"
                   width={30}
                   height={30}
                   className="w-5 h-5 mr-3"
@@ -69,6 +73,8 @@ const page = async () => {
             </form>
             {/* <Button>Github</Button> */}
           </div>
+          <Separator />
+          <EmailLogin />
         </CardContent>
         <CardFooter>
           <CardDescription>More options will be added soon!</CardDescription>

@@ -4,7 +4,6 @@ import { GetFormatterForCurrency } from "@/lib/helpers";
 import Transaction from "@/models/Transaction";
 import UserSettings from "@/models/UserSettings";
 import { OverviewQuerySchema } from "@/schema/overview";
-import { User } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export async function GET(request: Request) {
@@ -44,6 +43,7 @@ async function getTransactionsHistory(userId: string, from: Date, to: Date) {
     throw new Error("User settings not found");
   }
   const formatter = GetFormatterForCurrency(userSettings.currencyCode);
+  console.log(formatter);
   const transactions = await Transaction.find({
     userId,
     date: {

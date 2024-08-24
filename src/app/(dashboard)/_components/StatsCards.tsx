@@ -22,13 +22,13 @@ export default function StatsCards({ from, to, userSettings }: Props) {
         `/api/stats/balance?from=${DateToUTCDate(from)}&to=${DateToUTCDate(to)}`
       ).then((res) => res.json()),
   });
-  console.log(from, statsQuery);
   const formatter = useMemo(() => {
     return GetFormatterForCurrency(userSettings.currencyCode);
   }, [userSettings.currencyCode]);
   const income = statsQuery.data?.income || 0;
   const expense = statsQuery.data?.expense || 0;
   const balance = income - expense;
+
   return (
     <div className="flex relative w-full flex-wrap gap-2 md:flex-nowrap">
       <SkeletonWrapper isLoading={statsQuery.isFetching}>

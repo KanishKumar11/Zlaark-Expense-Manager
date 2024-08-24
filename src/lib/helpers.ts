@@ -1,5 +1,4 @@
 import { Currencies } from "./currencies";
-
 export function DateToUTCDate(date: Date) {
   return new Date(
     Date.UTC(

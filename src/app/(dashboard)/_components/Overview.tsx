@@ -21,8 +21,6 @@ const Overview = ({ userSettings }: { userSettings: IUserSettings }) => {
 
   // Lifetime range (assuming from the earliest possible date)
   const lifetimeRange = { from: new Date(2000, 0, 1), to: new Date() };
-  console.log(lifetimeRange);
-  console.log(dateRange);
 
   // Current financial year range (assuming financial year starts in April)
   const currentYear = new Date().getFullYear();

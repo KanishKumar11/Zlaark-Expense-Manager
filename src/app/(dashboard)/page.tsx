@@ -15,7 +15,9 @@ const page = async () => {
   if (!session) {
     redirect("/auth");
   }
+  console.log(session);
   const userSettings = await UserSettings.findOne({ userId: session.user?.id });
+  console.log(userSettings);
   if (!userSettings) redirect("/wizard");
   return (
     <div className="h-full bg-background relative pb-10">
