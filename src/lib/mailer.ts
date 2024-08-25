@@ -15,7 +15,7 @@ export async function sendVerificationEmail(to: string, token: string) {
   const url = `${process.env.AUTH_URL}/verify?token=${token}`;
 
   await transporter.sendMail({
-    from: process.env.EMAIL_USER,
+    from: `"Zlaark" <${process.env.EMAIL_USER}>`,
     to,
     subject: "Verify your email address",
     html: `<!DOCTYPE html>
