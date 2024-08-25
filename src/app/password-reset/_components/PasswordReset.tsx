@@ -24,12 +24,12 @@ import {
   FormMessage,
   FormField,
 } from "@/components/ui/form";
-import { signIn } from "next-auth/react";
 import { validatePassword } from "@/lib/actions";
+import { resetPassword } from "../_actions/actions";
+import { toast } from "sonner";
 
 // Define the schema with Zod
 const formSchema = z.object({
-  fullName: z.string().min(2).max(50),
   password: z
     .string()
     .min(8)
@@ -47,10 +47,11 @@ const formSchema = z.object({
 // Define types for form data
 type FormData = z.infer<typeof formSchema>;
 
-export default function Verify() {
+export default function ResetPassword() {
   const [isValidToken, setIsValidToken] = useState<boolean>(false);
-  const [email, setEmail] = useState<string | undefined>(undefined); // Explicitly set type
+  const [email, setEmail] = useState<string>("");
   const searchParams = useSearchParams();
+
   const token = searchParams.get("token");
 
   useEffect(() => {
@@ -71,11 +72,16 @@ export default function Verify() {
   });
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    await signIn("credentials", {
-      ...data,
-      email,
-      redirectTo: "/wizard",
-    });
+    if (token) {
+      toast.loading("Updating password...", {
+        id: "reset-password",
+      });
+      await resetPassword(email, data.password);
+      toast.success("Password changed successfully!", {
+        id: "reset-password",
+      });
+      redirect("/auth"); // Redirect to login or success page after reset
+    }
   };
 
   if (!token) redirect("/auth");
@@ -85,11 +91,11 @@ export default function Verify() {
       <Card>
         <CardHeader>
           <CardTitle>
-            {isValidToken ? "Enter your details" : "Invalid Token"}
+            {isValidToken ? "Reset your password" : "Invalid Token"}
           </CardTitle>
           <CardDescription>
             {isValidToken
-              ? "To enter the world of Zlaark expense manager"
+              ? "Enter your new password below"
               : "The token is expired or invalid. Please request a new one."}
           </CardDescription>
         </CardHeader>
@@ -102,26 +108,10 @@ export default function Verify() {
               >
                 <FormField
                   control={form.control}
-                  name="fullName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Full Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="John Doe" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Please enter your full name.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>New Password</FormLabel>
                       <FormControl>
                         <Input
                           type="password"
@@ -136,7 +126,7 @@ export default function Verify() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit">Continue</Button>
+                <Button type="submit">Reset Password</Button>
               </form>
             </Form>
           ) : (

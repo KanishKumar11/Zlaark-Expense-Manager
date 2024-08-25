@@ -10,13 +10,15 @@ import { signIn } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z, ZodError } from "zod";
+import bcrypt from "bcryptjs";
+
 const emailSchema = z.object({
   email: z.string().email("Invalid email address"),
 });
 
 export default function EmailLogin() {
-  const [email, setEmail] = useState<string>();
-  const [password, setPassword] = useState<string>();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [existingUser, setExistingUser] = useState<boolean>(false);
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
@@ -45,7 +47,7 @@ export default function EmailLogin() {
         toast.success("Found your account, Please enter your password");
       } else {
         const token = await generateToken(email!);
-        sendVerificationEmail(email!, token);
+        sendVerificationEmail(email!, token, false);
         toast.success("Verification email sent successfully!");
         setError(null);
         setIsWaiting(true);
@@ -60,14 +62,52 @@ export default function EmailLogin() {
   };
 
   const loginUser = async () => {
-    console.log(email);
-    await signIn("credentials", {
-      email,
-      password,
-      redirect: true,
-    });
-    console.log(password);
+    try {
+      // Fetch the user by email
+      const user = await getUserByEmail(email!);
+      if (!user) {
+        toast.error("No account found with this email.");
+        return;
+      }
+
+      // Compare the entered password with the hashed password
+      const isValidPassword = await bcrypt.compare(password, user.password);
+      if (!isValidPassword) {
+        toast.error("Incorrect password! Please try again.");
+        return;
+      }
+
+      setError(null); // Clear any previous errors
+
+      await signIn("credentials", {
+        email,
+        password,
+        redirect: false, // Prevent redirect to handle errors
+      });
+    } catch (error) {
+      setError("Failed to sign in. Please try again.");
+    }
   };
+
+  const handleChangeEmail = () => {
+    // Reset the existing user state and allow the user to change the email
+    setExistingUser(false);
+    setEmail("");
+    setPassword("");
+    setError(null);
+  };
+
+  const handleForgotPassword = async () => {
+    try {
+      // Generate a token and send a password reset email
+      const token = await generateToken(email!);
+      sendVerificationEmail(email!, token, true);
+      toast.success("Password reset email sent successfully!");
+    } catch (error) {
+      toast.error("Failed to send password reset email. Please try again.");
+    }
+  };
+
   return (
     <div className="flex flex-col gap-2">
       <Label htmlFor="email">Email</Label>
@@ -75,19 +115,19 @@ export default function EmailLogin() {
         placeholder="Enter your email"
         name="email"
         type="email"
+        value={email}
         disabled={existingUser}
         onChange={(e) => setEmail(e.target.value)}
       />
 
       {error && <p className="text-red-500">{error}</p>}
       {isWaiting && (
-        <p className=" text-sm">
-          Didn&#39;t got email? Resend after {timeLeft} seconds
+        <p className="text-sm">
+          Didn&#39;t get email? Resend after {timeLeft} seconds
         </p>
       )}
       {existingUser && (
         <>
-          {" "}
           <Label htmlFor="password">Password</Label>
           <Input
             placeholder="Enter your password"
@@ -103,6 +143,16 @@ export default function EmailLogin() {
       >
         Continue
       </Button>
+      {existingUser && (
+        <div className="flex justify-between mt-2">
+          <Button variant="link" onClick={handleChangeEmail}>
+            Change Email
+          </Button>
+          <Button variant="link" onClick={handleForgotPassword}>
+            Forgot Password?
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

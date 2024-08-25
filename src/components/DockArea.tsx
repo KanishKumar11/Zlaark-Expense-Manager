@@ -15,6 +15,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { ResetIcon } from "@radix-ui/react-icons";
+import { generateToken } from "@/lib/jwt";
+import { sendVerificationEmail } from "@/lib/mailer";
+import { toast } from "sonner";
 
 export type IconProps = React.HTMLAttributes<SVGElement>;
 
@@ -23,7 +27,16 @@ export default function DockArea() {
   useMemo(() => {
     getSession().then((res) => setSession(res));
   }, []);
-
+  const handleForgotPassword = async () => {
+    try {
+      // Generate a token and send a password reset email
+      const token = await generateToken(session?.user?.email!);
+      sendVerificationEmail(session?.user?.email!, token, true);
+      toast.success("Password reset email sent successfully!");
+    } catch (error) {
+      toast.error("Failed to send password reset email. Please try again.");
+    }
+  };
   console.log(session);
   console.log(session?.user?.name?.split(" ")[0]);
   return (
@@ -61,6 +74,10 @@ export default function DockArea() {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>Your Profile</DropdownMenuLabel>
+            <DropdownMenuItem onClick={handleForgotPassword}>
+              <ResetIcon className="mr-2 h-4 w-4" />
+              Reset Password
+            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
                 signOut();

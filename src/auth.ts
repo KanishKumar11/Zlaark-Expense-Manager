@@ -36,24 +36,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       async authorize(credentials) {
         const { fullName, email, password } = credentials as Credentials;
         const existingUser = await getUserByEmail(email);
-        if (existingUser) {
-          const isValidPassword = await bcrypt.compare(
-            password,
-            existingUser.password
-          );
-          console.log(isValidPassword);
-          console.log(existingUser);
-          if (isValidPassword) {
-            return {
-              id: existingUser._id.toString(),
-              email: existingUser.email,
-              fullName: existingUser.fullName,
-              avatar: existingUser.avatar,
-            };
-          } else {
-            throw new Error("Invalid password");
-          }
-        } else {
+        if (!existingUser) {
           const avatar = "";
           const user = await handleEmailSignIn(
             fullName,
@@ -68,6 +51,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             avatar,
           };
         }
+
+        return {
+          id: existingUser._id.toString(),
+          email: existingUser.email,
+          fullName: existingUser.fullName,
+          avatar: existingUser.avatar,
+        };
       },
     }),
   ],

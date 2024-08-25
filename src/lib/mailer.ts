@@ -11,13 +11,17 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export async function sendVerificationEmail(to: string, token: string) {
+export async function sendVerificationEmail(
+  to: string,
+  token: string,
+  reset: boolean
+) {
   const url = `${process.env.AUTH_URL}/verify?token=${token}`;
 
   await transporter.sendMail({
     from: `"Zlaark" <${process.env.EMAIL_USER}>`,
     to,
-    subject: "Verify your email address",
+    subject: `${reset ? "Reset your password" : "Verify your email address"}`,
     html: `<!DOCTYPE html>
 
 <html
@@ -613,7 +617,7 @@ export async function sendVerificationEmail(to: string, token: string) {
                                       <img
                                         alt="I'm an image"
                                         height="auto"
-                                        src="https://kanishkumar.in/Img1_2x.jpg"
+                                        src="https://zlaark.kanishkumar.in/Img1_2x.jpg"
                                         style="
                                           display: block;
                                           height: auto;
@@ -718,7 +722,11 @@ export async function sendVerificationEmail(to: string, token: string) {
                                           color: #2b303a;
                                         "
                                         ><strong
-                                          >Verify Your Email</strong
+                                          >${
+                                            reset
+                                              ? "Reset your password"
+                                              : "Verify your email address"
+                                          }</strong
                                         ></span
                                       >
                                     </p>
@@ -769,9 +777,11 @@ export async function sendVerificationEmail(to: string, token: string) {
                                           word-break: break-word;
                                           color: #808389;
                                         "
-                                        >Click on the verify button, to continue
-                                        with your account creation process. This
-                                        button will be valid till 1 hour.</span
+                                        >${
+                                          reset
+                                            ? "Click on the verify button, to continue with your password reset process. This button will be valid till 1 hour."
+                                            : "Click on the verify button, to continue with your account creation process. This button will be valid till 1 hour."
+                                        }</span
                                       >
                                     </p>
                                   </div>
@@ -848,7 +858,11 @@ export async function sendVerificationEmail(to: string, token: string) {
                                               line-height: 32px;
                                             "
                                             ><strong
-                                              >Confirm Your Email</strong
+                                              >${
+                                                reset
+                                                  ? "Reset your password"
+                                                  : "Confirm Your Email"
+                                              }</strong
                                             ></span
                                           ></span
                                         >

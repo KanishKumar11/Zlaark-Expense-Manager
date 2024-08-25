@@ -4,6 +4,7 @@ import "./globals.css";
 import "@/styles/shadcn.css";
 import RootProviders from "@/components/providers/RootProviders";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { cn } from "@/lib/utils";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -18,7 +19,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="min-h-[80vh] h-full">
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link
@@ -48,7 +49,7 @@ export default async function RootLayout({
 
         <GoogleAnalytics gaId="G-TQT9MD1JJL" />
       </head>
-      <body className={montserrat.className}>
+      <body className={cn(montserrat.className, "min-h-[80vh] h-full")}>
         <RootProviders>{children}</RootProviders>
       </body>
     </html>
