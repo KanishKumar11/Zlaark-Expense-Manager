@@ -1,39 +1,42 @@
-import { useState, useEffect } from "react";
-interface BeforeInstallPromptEvent extends Event {
-  readonly platforms: string[];
-  prompt(): Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
-}
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
-const AddToHomeScreen: React.FC = () => {
-  const [deferredPrompt, setDeferredPrompt] =
-    useState<BeforeInstallPromptEvent | null>(null);
-  const [showPrompt, setShowPrompt] = useState<boolean>(false);
+const AddToHomeScreenPrompt = () => {
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [showPrompt, setShowPrompt] = useState(false);
 
   useEffect(() => {
-    const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setShowPrompt(true);
-    };
+    const lastPrompt = localStorage.getItem("a2hs-last-prompt");
+    const oneDay = 24 * 60 * 60 * 1000; // One day in milliseconds
+    const now = Date.now();
 
-    window.addEventListener(
-      "beforeinstallprompt",
-      handleBeforeInstallPrompt as EventListener
-    );
+    // Check if the prompt should be shown again
+    if (!lastPrompt || now - parseInt(lastPrompt) > oneDay) {
+      const handler = (e: any) => {
+        e.preventDefault();
+        setDeferredPrompt(e);
+        setShowPrompt(true);
+      };
 
-    return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        handleBeforeInstallPrompt as EventListener
-      );
-    };
+      window.addEventListener("beforeinstallprompt", handler);
+
+      return () => {
+        window.removeEventListener("beforeinstallprompt", handler);
+      };
+    }
   }, []);
 
-  const handleAddToHomeScreen = () => {
+  const handleInstall = () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult) => {
+      deferredPrompt.userChoice.then((choiceResult: any) => {
         if (choiceResult.outcome === "accepted") {
           console.log("User accepted the A2HS prompt");
         } else {
@@ -41,25 +44,34 @@ const AddToHomeScreen: React.FC = () => {
         }
         setDeferredPrompt(null);
         setShowPrompt(false);
+        localStorage.setItem("a2hs-last-prompt", Date.now().toString());
       });
     }
   };
 
-  if (!showPrompt) {
-    return null;
-  }
+  const handleRemindLater = () => {
+    setShowPrompt(false);
+    localStorage.setItem("a2hs-last-prompt", Date.now().toString());
+  };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 p-4 bg-white shadow-lg flex justify-between items-center">
-      <span>Add this app to your home screen for a better experience.</span>
-      <button
-        onClick={handleAddToHomeScreen}
-        className="bg-blue-500 text-white py-2 px-4 rounded-lg"
-      >
-        Add to Home Screen
-      </button>
-    </div>
+    <Dialog open={showPrompt} onOpenChange={setShowPrompt}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add Zlaark to Home Screen</DialogTitle>
+          <DialogDescription>
+            Get quick access to Zlaark by adding it to your home screen.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex justify-end space-x-2">
+          <Button variant="ghost" onClick={handleRemindLater}>
+            Remind me later
+          </Button>
+          <Button onClick={handleInstall}>Add to Home Screen</Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
-export default AddToHomeScreen;
+export default AddToHomeScreenPrompt;

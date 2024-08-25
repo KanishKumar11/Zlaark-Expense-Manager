@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import "@/styles/shadcn.css";
-import { SessionProvider } from "next-auth/react";
-import { auth } from "@/auth";
 import RootProviders from "@/components/providers/RootProviders";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
@@ -22,7 +20,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* <link rel="manifest" href="/manifest.json" /> */}
+        <link rel="manifest" href="/manifest.json" />
         <link
           rel="icon"
           type="image/png"
