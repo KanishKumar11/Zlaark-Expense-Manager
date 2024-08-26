@@ -3,7 +3,7 @@
   "short_name": "Zlaark",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#edffff",
+  "background_color": "hsl(148 52% 98%)",
   "theme_color": "#000000",
   "description": "The Expense Manager App",
   "icons": [
