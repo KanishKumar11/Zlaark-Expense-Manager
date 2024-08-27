@@ -16,7 +16,9 @@ export async function sendVerificationEmail(
   token: string,
   reset: boolean
 ) {
-  const url = `${process.env.AUTH_URL}/verify?token=${token}`;
+  const url = `${process.env.AUTH_URL}/${
+    reset ? "password-reset" : "verify"
+  }?token=${token}`;
 
   await transporter.sendMail({
     from: `"Zlaark" <${process.env.EMAIL_USER}>`,
