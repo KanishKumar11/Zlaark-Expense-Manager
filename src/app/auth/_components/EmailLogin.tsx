@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z, ZodError } from "zod";
 import bcrypt from "bcryptjs";
+import { redirect } from "next/navigation";
 
 const emailSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -84,6 +85,7 @@ export default function EmailLogin() {
         password,
         redirect: false, // Prevent redirect to handle errors
       });
+      redirect("/");
     } catch (error) {
       setError("Failed to sign in. Please try again.");
     }
