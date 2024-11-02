@@ -19,7 +19,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="min-h-[80vh] h-full">
+    <html lang="en">
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link
@@ -49,7 +49,7 @@ export default async function RootLayout({
 
         <GoogleAnalytics gaId="G-TQT9MD1JJL" />
       </head>
-      <body className={cn(montserrat.className, "min-h-[80vh] h-full")}>
+      <body className={cn(montserrat.className)}>
         <RootProviders>{children}</RootProviders>
       </body>
     </html>

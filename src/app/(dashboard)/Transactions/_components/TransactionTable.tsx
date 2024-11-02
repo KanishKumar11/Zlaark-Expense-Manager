@@ -96,7 +96,7 @@ const columns: ColumnDef<TransactionHistoryRow>[] = [
     cell: ({ row }) => (
       <div
         className={cn(
-          "capitalize rounded-lg text-center p-2",
+          "capitalize  text-center p-2",
           row.original._doc.type === "income"
             ? "bg-emerald-400/10 text-emerald-500"
             : "bg-rose-400/10 text-rose-500"

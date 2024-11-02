@@ -20,7 +20,7 @@ const page = async () => {
   console.log(userSettings);
   if (!userSettings) redirect("/wizard");
   return (
-    <div className="h-full bg-background relative pb-10">
+    <div className="h-full bg-background relative mb-20 border border-red-700 ">
       <div className="border-b bg-card ">
         <div className="container flex flex-wrap items-center justify-between gap-6 py-8">
           <p className="font-bold text-3xl">

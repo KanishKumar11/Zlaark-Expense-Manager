@@ -30,7 +30,7 @@ export default function Page() {
   }, []);
   // if (!session) redirect("/auth");
   return (
-    <>
+    <div className="mb-10">
       <div className="border-b bg-card ">
         <div className="container flex flex-wrap items-center justify-between gap-6 py-8">
           <div>
@@ -56,7 +56,7 @@ export default function Page() {
         <CategoryList type="income" />
         <CategoryList type="expense" />
       </div>
-    </>
+    </div>
   );
 }
 function CategoryList({ type }: { type: TransactionType }) {
