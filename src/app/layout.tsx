@@ -10,7 +10,42 @@ const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Zlaark | The Expense Manager App",
-  description: "Zlaark | The Expense Manager App",
+  description:
+    "Ease your expense tracking with Zlaark | The Expense Manager App. Our easy-to-use tool makes your finance management effortless.",
+  keywords: "expense manager, expense tracker, expense app",
+  authors: [{ name: "Kanish Kumar", url: " https://kanishkumar.in/" }],
+  creator: "Zlaark",
+  publisher: "Zlaark",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://zlaark.kanishkumar.in/",
+    siteName: "Zlaark Expense Manager",
+    title: "Zlaark | The Expense Manager App",
+    description:
+      "Ease your expense tracking with Zlaark | The Expense Manager App. Our easy-to-use tool makes your finance management effortless.",
+    images: [
+      {
+        url: "https://zlaark.kanishkumar.in/meta.png",
+        width: 1200,
+        height: 630,
+        alt: "Expense Manager App",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@kanishkumar_11",
+    creator: "@kanishkumar_11",
+    title: "Zlaark | The Expense Manager App",
+    description:
+      "Ease your expense tracking with Zlaark | The Expense Manager App. Our easy-to-use tool makes your finance management effortless.",
+    images: ["https://zlaark.kanishkumar.in/meta.png"],
+  },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
 };
 
 export default async function RootLayout({
